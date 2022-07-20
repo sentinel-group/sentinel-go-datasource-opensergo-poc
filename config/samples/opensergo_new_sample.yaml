@@ -1,0 +1,24 @@
+apiVersion: fault-tolerance.opensergo.io/v1alpha1
+kind: RateLimitStrategy
+metadata:
+  name: rate-limit-foo
+  labels:
+    app: foo-app
+spec:
+  metricType: RequestAmount
+  limitMode: Local
+  threshold: 3
+  statDurationSeconds: 5
+---
+apiVersion: fault-tolerance.opensergo.io/v1alpha1
+kind: FaultToleranceRule
+metadata:
+  name: my-opensergo-rule-1
+  labels:
+    app: foo-app
+spec:
+  targets:
+    - targetResourceName: 'GET:/foo'
+  strategies:
+    - name: rate-limit-foo
+      kind: RateLimitStrategy
